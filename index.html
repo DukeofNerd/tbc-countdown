@@ -83,19 +83,30 @@
     /* Overlay that should line up with the blank frames in hero.png */
 .heroGrid{
   position: absolute;
-  inset: 0;
+  top: 0;
+  bottom: 0;
+
+  /* CENTER THE WHOLE OVERLAY GROUP */
+  left: 50%;
+  transform: translateX(-50%);
+
+  /* This width is the magic: it keeps both panels aligned to the frames */
+  width: min(920px, calc(100% - 140px));
+
   display: grid;
   grid-template-columns: 1fr 1fr;
+  gap: clamp(18px, 2.6vw, 34px);
 
-  column-gap: clamp(18px, 2.6vw, 34px);
-
-  padding-left: clamp(60px, 7vw, 110px);
-  padding-right: clamp(60px, 7vw, 110px);
+  /* Vertical placement into the big frames */
   padding-top: clamp(210px, 23vw, 260px);
   padding-bottom: clamp(40px, 6vw, 80px);
 
   align-content: start;
+
+  /* Make each panel sit nicely inside its column */
+  justify-items: stretch;
 }
+
 
 
 .panel{
@@ -103,19 +114,20 @@
   padding: clamp(18px, 2.3vw, 26px);
   border-radius: 12px;
 
-  /* lighter, clearer overlay */
-  background: rgba(12, 10, 8, .18);
-  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(12, 10, 8, .14);
+  border: 1px solid rgba(255,255,255,.10);
 
-  /* reduce fuzz */
-  backdrop-filter: blur(1px);
+  /* no blur = crisp art */
+  backdrop-filter: none;
 
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
 
-  margin: 0 18px;
+  /* IMPORTANT: remove any margin that shifts the panels */
+  margin: 0;
 }
+
 
 
 
@@ -287,6 +299,7 @@
   </script>
 </body>
 </html>
+
 
 
 
