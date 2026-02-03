@@ -81,29 +81,42 @@
     }
 
     /* Overlay that should line up with the blank frames in hero.png */
-    .heroGrid{
-      position: absolute;
-      inset: 0;
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: clamp(14px, 2.2vw, 26px);
+.heroGrid{
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(14px, 2.2vw, 26px);
 
-      /* The one knob that moves BOTH panels up/down within the art */
-      padding: clamp(52px, 5.0vw, 72px);
+  /* This positions the overlays into the BIG top boxes */
+  padding-left: clamp(26px, 5.0vw, 62px);
+  padding-right: clamp(26px, 5.0vw, 62px);
 
-      align-content: end;
-    }
+  /* BIG CHANGE: top padding pushes content down from the title area */
+  padding-top: clamp(210px, 23vw, 260px);
 
-    /* Transparent readable layer */
- .panel{
-  padding: clamp(14px, 2.1vw, 20px);
-  border-radius: 12px;
-  background: rgba(12, 10, 8, .55);
-  border: 1px solid rgba(255,255,255,.10);
-  backdrop-filter: none;
-  max-height: 155px;
-  overflow: hidden;
+  /* bottom padding keeps it off the bottom edge */
+  padding-bottom: clamp(40px, 6vw, 80px);
+
+  align-content: start; /* <-- was end; now we anchor from the top */
 }
+
+
+.panel{
+  height: 100%;                 /* fill the big rectangle space */
+  padding: clamp(18px, 2.3vw, 26px);
+  border-radius: 12px;
+
+  /* readable but still “in-world” */
+  background: rgba(12, 10, 8, .28);
+  border: 1px solid rgba(255,255,255,.10);
+  backdrop-filter: blur(3px);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
 
     .label{
       font-family: var(--mono);
@@ -273,5 +286,6 @@
   </script>
 </body>
 </html>
+
 
 
