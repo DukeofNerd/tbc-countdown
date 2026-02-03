@@ -3,23 +3,22 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>TBC Countdown</title>
+  <title>Grace — TBC Countdown</title>
 
   <!-- Discord / Open Graph -->
-<meta property="og:type" content="website" />
-<meta property="og:title" content="TBC Countdown" />
-<meta property="og:description" content="Launch + raids unlock timers in one clean page." />
-<meta property="og:url" content="https://dukeofnerd.github.io/tbc-countdown/" />
-<meta property="og:image" content="https://dukeofnerd.github.io/tbc-countdown/og-image.png" />
-<meta name="twitter:card" content="summary_large_image" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Grace — TBC Countdown" />
+  <meta property="og:description" content="For light and loot. Launch + raids unlock timers." />
+  <meta property="og:url" content="https://dukeofnerd.github.io/tbc-countdown/" />
+  <meta property="og:image" content="https://dukeofnerd.github.io/tbc-countdown/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
 
   <style>
     :root{
       --bg: #0b0b12;
-      --card: #191a26;
-      --stroke: rgba(255,255,255,.08);
+      --stroke: rgba(255,255,255,.10);
       --text: rgba(255,255,255,.92);
-      --muted: rgba(255,255,255,.55);
+      --muted: rgba(255,255,255,.60);
       --accent: #b06cff;
       --shadow: 0 18px 50px rgba(0,0,0,.55);
       --radius: 14px;
@@ -30,9 +29,10 @@
     html, body { height: 100%; }
     body{
       margin:0;
-      background: radial-gradient(1200px 500px at 30% -10%, rgba(176,108,255,.25), transparent 60%),
-                  radial-gradient(900px 400px at 90% 10%, rgba(90,160,255,.14), transparent 60%),
-                  var(--bg);
+      background:
+        radial-gradient(1200px 500px at 30% -10%, rgba(176,108,255,.25), transparent 60%),
+        radial-gradient(900px 400px at 90% 10%, rgba(90,160,255,.14), transparent 60%),
+        var(--bg);
       color: var(--text);
       font-family: var(--sans);
       display:flex;
@@ -42,68 +42,19 @@
     }
 
     .wrap{
-      width: min(760px, 100%);
+      width: min(980px, 100%);
       display:grid;
-      gap: 18px;
+      gap: 14px;
     }
 
-    .card{
-      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
-      border: 1px solid var(--stroke);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 18px 18px 16px;
-      backdrop-filter: blur(6px);
-    }
-
-    .label{
-      font-family: var(--mono);
-      color: var(--accent);
-      font-size: 13px;
-      letter-spacing: .06em;
-      text-transform: lowercase;
-      margin-bottom: 8px;
-    }
-
-    .timer{
-      font-family: var(--mono);
-      font-size: clamp(34px, 4.6vw, 44px);
-      font-weight: 700;
-      line-height: 1.05;
-      margin: 0 0 10px 0;
-      white-space: nowrap;
-    }
-
-    .sub{
-      font-family: var(--mono);
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    .row{
-      display:flex;
-      align-items:baseline;
-      justify-content:space-between;
-      gap: 12px;
-    }
-
-    .tz{
-      font-family: var(--mono);
-      color: var(--muted);
-      font-size: 12px;
-      opacity: .85;
-    }
-
-    .controls{
+    .topbar{
       display:flex;
       justify-content:flex-end;
-      gap: 10px;
-      margin-bottom: 4px;
     }
 
     select{
       appearance:none;
-      background: rgba(255,255,255,.04);
+      background: rgba(255,255,255,.05);
       border: 1px solid var(--stroke);
       color: var(--text);
       border-radius: 10px;
@@ -112,19 +63,95 @@
       font-size: 12px;
       outline: none;
     }
+
+    /* HERO IMAGE "STAGE" */
     .hero{
-  width: 100%;
-  border-radius: 14px;
-  border: 1px solid var(--stroke);
-  box-shadow: var(--shadow);
-}
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border-radius: var(--radius);
+      border: 1px solid var(--stroke);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+
+      /* your blank-panels image */
+      background: url("./hero.png") center / cover no-repeat;
+    }
+
+    /* Overlay container that lines up with panels in the hero art */
+    .heroGrid{
+      position: absolute;
+      inset: 0;
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(14px, 2.2vw, 26px);
+
+      /* IMPORTANT: this padding controls where the text lands on the art */
+      padding: clamp(26px, 5.2vw, 64px);
+      align-content: end;
+    }
+
+    /* The transparent “text panel” that sits on top of the blank frames */
+    .panel{
+      padding: clamp(14px, 2.1vw, 22px);
+      border-radius: 12px;
+
+      /* keeps text readable without hiding the art */
+      background: rgba(0,0,0,.30);
+      border: 1px solid rgba(255,255,255,.14);
+      backdrop-filter: blur(6px);
+    }
+
+    .label{
+      font-family: var(--mono);
+      color: var(--accent);
+      font-size: clamp(12px, 1.2vw, 13px);
+      letter-spacing: .06em;
+      text-transform: lowercase;
+      margin-bottom: 8px;
+    }
+
+    .timer{
+      font-family: var(--mono);
+      font-size: clamp(26px, 3.1vw, 44px);
+      font-weight: 800;
+      line-height: 1.05;
+      margin: 0 0 10px 0;
+      white-space: nowrap;
+    }
+
+    .subrow{
+      display:flex;
+      justify-content:space-between;
+      gap: 12px;
+      align-items:baseline;
+      font-family: var(--mono);
+      font-size: clamp(11px, 1.2vw, 13px);
+      color: var(--muted);
+    }
+
+    .tz{
+      opacity:.9;
+      text-transform: lowercase;
+    }
+
+    /* Mobile: stack the panels */
+    @media (max-width: 720px){
+      .heroGrid{
+        grid-template-columns: 1fr;
+        align-content: end;
+        padding: 16px;
+      }
+      .timer{
+        font-size: 30px;
+      }
+    }
   </style>
 </head>
 
 <body>
   <div class="wrap">
-    <img class="hero" src="./og-image.png" alt="Grace TBC Countdown" />
-    <div class="controls">
+    <div class="topbar">
       <select id="tzSelect" title="Timezone display">
         <option value="local">local time</option>
         <option value="America/Los_Angeles">PT</option>
@@ -135,41 +162,37 @@
       </select>
     </div>
 
-    <div class="card" id="launchCard">
-      <div class="label">tbc launch</div>
-      <div class="timer" id="launchTimer">--</div>
-      <div class="row">
-        <div class="sub" id="launchDate">--</div>
-        <div class="tz" id="launchTz">--</div>
-      </div>
-    </div>
+    <div class="hero" aria-label="Grace TBC Anniversary Countdown">
+      <div class="heroGrid">
+        <div class="panel">
+          <div class="label">tbc launch</div>
+          <div class="timer" id="launchTimer">--</div>
+          <div class="subrow">
+            <div id="launchDate">--</div>
+            <div class="tz" id="launchTz">--</div>
+          </div>
+        </div>
 
-    <div class="card" id="raidsCard">
-      <div class="label">raids unlock</div>
-      <div class="timer" id="raidsTimer">--</div>
-      <div class="row">
-        <div class="sub" id="raidsDate">--</div>
-        <div class="tz" id="raidsTz">--</div>
+        <div class="panel">
+          <div class="label">raids unlock</div>
+          <div class="timer" id="raidsTimer">--</div>
+          <div class="subrow">
+            <div id="raidsDate">--</div>
+            <div class="tz" id="raidsTz">--</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
   <script>
-    // ✅ SET YOUR DATES HERE (ISO 8601).
-    // If your times are "Thu, 5 Feb 2026, 15:00 PST", that is:
-    // 2026-02-05T23:00:00Z (PST is UTC-8). Same for Feb 19.
-    const EVENTS = [
-      {
-        key: "launch",
-        title: "tbc launch",
-        targetISO: "2026-02-05T23:00:00Z"
-      },
-      {
-        key: "raids",
-        title: "raids unlock",
-        targetISO: "2026-02-19T23:00:00Z"
-      }
-    ];
+    // === SET YOUR DATES HERE (ISO 8601 in UTC "Z") ===
+    // Feb 5 2026 15:00 PST = 2026-02-05T23:00:00Z
+    // Feb 19 2026 15:00 PST = 2026-02-19T23:00:00Z
+    const EVENTS = {
+      launch: { targetISO: "2026-02-05T23:00:00Z" },
+      raids:  { targetISO: "2026-02-19T23:00:00Z" }
+    };
 
     const els = {
       tzSelect: document.getElementById("tzSelect"),
@@ -184,77 +207,17 @@
     function pad(n){ return String(n).padStart(2, "0"); }
 
     function formatCountdown(ms){
-      if (ms <= 0) return "0d 0h 0m 0s";
-      const totalSeconds = Math.floor(ms / 1000);
-
-      const days = Math.floor(totalSeconds / 86400);
-      const hours = Math.floor((totalSeconds % 86400) / 3600);
-      const minutes = Math.floor((totalSeconds % 3600) / 60);
-      const seconds = totalSeconds % 60;
-
-      return `${days}d ${pad(hours)}h ${pad(minutes)}m ${pad(seconds)}s`;
-    }
-
-    function formatDate(targetDate, tzMode){
-      // "thu, 5 feb 2026, 15:00 pst" style-ish
-      const opts = {
-        weekday: "short",
-        day: "numeric",
-        month: "short",
-        year: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: false,
-        timeZone: tzMode === "local" ? undefined : tzMode
-      };
-
-      const fmt = new Intl.DateTimeFormat(undefined, opts);
-      // e.g. "Thu, Feb 5, 2026, 15:00"
-      return fmt.format(targetDate).replace(/,/g, ",").toLowerCase();
+      if (ms <= 0) return "LIVE";
+      const s = Math.floor(ms / 1000);
+      const d = Math.floor(s / 86400);
+      const h = Math.floor((s % 86400) / 3600);
+      const m = Math.floor((s % 3600) / 60);
+      const sec = s % 60;
+      return `${d}d ${pad(h)}h ${pad(m)}m ${pad(sec)}s`;
     }
 
     function tzLabel(tzMode){
       if (tzMode === "local") return "local";
       if (tzMode === "UTC") return "utc";
-      // short labels for common US zones
-      const map = {
-        "America/Los_Angeles": "pt",
-        "America/Denver": "mt",
-        "America/Chicago": "ct",
-        "America/New_York": "et"
-      };
-      return map[tzMode] || tzMode;
-    }
-
-    function render(){
-      const tzMode = els.tzSelect.value;
-      const now = Date.now();
-
-      for (const ev of EVENTS){
-        const target = new Date(ev.targetISO);
-        const remaining = target.getTime() - now;
-
-        const timerText = remaining <= 0 ? "LIVE" : formatCountdown(remaining);
-        const dateText = formatDate(target, tzMode);
-        const tzText = tzLabel(tzMode);
-
-        if (ev.key === "launch"){
-          els.launchTimer.textContent = timerText;
-          els.launchDate.textContent = dateText;
-          els.launchTz.textContent = tzText;
-        } else {
-          els.raidsTimer.textContent = timerText;
-          els.raidsDate.textContent = dateText;
-          els.raidsTz.textContent = tzText;
-        }
-      }
-    }
-
-    els.tzSelect.addEventListener("change", render);
-    render();
-    setInterval(render, 250); // smooth-ish seconds without going nuts
-  </script>
-</body>
-</html>
-
-
+      return ({
+        "Ame
