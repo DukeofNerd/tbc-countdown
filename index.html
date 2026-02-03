@@ -222,97 +222,93 @@
     </div>
   </div>
 
-  <script>
-    // === SET YOUR DATES HERE (ISO 8601 in UTC "Z") ===
-    // Feb 5 2026 15:00 PST = 2026-02-05T23:00:00Z
-    // Feb 19 2026 15:00 PST = 2026-02-19T23:00:00Z
-    const EVENTS = {
-      launch: { targetISO: "2026-02-05T23:00:00Z" },
-      raids:  { targetISO: "2026-02-19T23:00:00Z" }
+<script>
+  // === SET YOUR DATES HERE (ISO 8601 in UTC "Z") ===
+  // Feb 5 2026 15:00 PST = 2026-02-05T23:00:00Z
+  // Feb 19 2026 15:00 PST = 2026-02-19T23:00:00Z
+  const EVENTS = {
+    launch: { targetISO: "2026-02-05T23:00:00Z" },
+    raids:  { targetISO: "2026-02-19T23:00:00Z" }
+  };
+
+  const els = {
+    tzSelect: document.getElementById("tzSelect"),
+    launchTimer: document.getElementById("launchTimer"),
+    launchDate: document.getElementById("launchDate"),
+    launchTz: document.getElementById("launchTz"),
+    raidsTimer: document.getElementById("raidsTimer"),
+    raidsDate: document.getElementById("raidsDate"),
+    raidsTz: document.getElementById("raidsTz"),
+  };
+
+  // Enable gold pulse on timers (once)
+  els.launchTimer.classList.add("pulsing");
+  els.raidsTimer.classList.add("pulsing");
+
+  function pad(n){ return String(n).padStart(2, "0"); }
+
+  function formatCountdown(ms){
+    if (ms <= 0) return "LIVE";
+    const s = Math.floor(ms / 1000);
+    const d = Math.floor(s / 86400);
+    const h = Math.floor((s % 86400) / 3600);
+    const m = Math.floor((s % 3600) / 60);
+    const sec = s % 60;
+    return `${d}d ${pad(h)}h ${pad(m)}m ${pad(sec)}s`;
+  }
+
+  function tzLabel(tzMode){
+    if (tzMode === "local") return "local";
+    if (tzMode === "UTC") return "utc";
+    return ({
+      "America/Los_Angeles": "pt",
+      "America/Denver": "mt",
+      "America/Chicago": "ct",
+      "America/New_York": "et"
+    })[tzMode] || tzMode;
+  }
+
+  function formatDate(dateObj, tzMode){
+    const opts = {
+      weekday: "short",
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+      timeZone: tzMode === "local" ? undefined : tzMode
     };
+    return new Intl.DateTimeFormat(undefined, opts).format(dateObj);
+  }
 
-    const els = {
-      tzSelect: document.getElementById("tzSelect"),
-      launchTimer: document.getElementById("launchTimer"),
-      launchDate: document.getElementById("launchDate"),
-      launchTz: document.getElementById("launchTz"),
-      raidsTimer: document.getElementById("raidsTimer"),
-      raidsDate: document.getElementById("raidsDate"),
-      raidsTz: document.getElementById("raidsTz"),
-    };
+  function render(){
+    const tzMode = els.tzSelect.value;
+    const now = Date.now();
 
-    // Enable gold pulse + glitter base on timers
-    els.launchTimer.classList.add("pulsing", "glitter");
-    els.raidsTimer.classList.add("pulsing", "glitter");
+    const launchTarget = new Date(EVENTS.launch.targetISO);
+    const raidsTarget  = new Date(EVENTS.raids.targetISO);
 
-    function pad(n){ return String(n).padStart(2, "0"); }
+    const launchRemaining = launchTarget.getTime() - now;
+    const raidsRemaining  = raidsTarget.getTime() - now;
 
-    function formatCountdown(ms){
-      if (ms <= 0) return "LIVE";
-      const s = Math.floor(ms / 1000);
-      const d = Math.floor(s / 86400);
-      const h = Math.floor((s % 86400) / 3600);
-      const m = Math.floor((s % 3600) / 60);
-      const sec = s % 60;
-      return `${d}d ${pad(h)}h ${pad(m)}m ${pad(sec)}s`;
-    }
+    els.launchTimer.textContent = formatCountdown(launchRemaining);
+    els.raidsTimer.textContent  = formatCountdown(raidsRemaining);
 
-    function tzLabel(tzMode){
-      if (tzMode === "local") return "local";
-      if (tzMode === "UTC") return "utc";
-      return ({
-        "America/Los_Angeles": "pt",
-        "America/Denver": "mt",
-        "America/Chicago": "ct",
-        "America/New_York": "et"
-      })[tzMode] || tzMode;
-    }
+    els.launchDate.textContent = formatDate(launchTarget, tzMode);
+    els.raidsDate.textContent  = formatDate(raidsTarget, tzMode);
 
-    function formatDate(dateObj, tzMode){
-      const opts = {
-        weekday: "short",
-        day: "numeric",
-        month: "short",
-        year: "numeric",
-        hour: "numeric",
-        minute: "2-digit",
-        hour12: true,
-        timeZone: tzMode === "local" ? undefined : tzMode
-      };
-      return new Intl.DateTimeFormat(undefined, opts).format(dateObj);
-    }
+    const tz = tzLabel(tzMode);
+    els.launchTz.textContent = tz;
+    els.raidsTz.textContent  = tz;
+  } // <-- THIS brace was missing in your version
 
-    let lastSecond = -1;
+  els.tzSelect.addEventListener("change", render);
+  render();
+  setInterval(render, 250);
+</script>
 
-
-    function render(){
-      const tzMode = els.tzSelect.value;
-      const now = Date.now();
-
-      const launchTarget = new Date(EVENTS.launch.targetISO);
-      const raidsTarget  = new Date(EVENTS.raids.targetISO);
-
-      const launchRemaining = launchTarget.getTime() - now;
-      const raidsRemaining  = raidsTarget.getTime() - now;
-
-      els.launchTimer.textContent = formatCountdown(launchRemaining);
-      els.raidsTimer.textContent  = formatCountdown(raidsRemaining);
-
-      els.launchDate.textContent = formatDate(launchTarget, tzMode);
-      els.raidsDate.textContent  = formatDate(raidsTarget, tzMode);
-
-      const tz = tzLabel(tzMode);
-      els.launchTz.textContent = tz;
-      els.raidsTz.textContent  = tz;
-els.launchTimer.classList.add("pulsing");
-els.raidsTimer.classList.add("pulsing");
-
-   
-
-    els.tzSelect.addEventListener("change", render);
-    render();
-    setInterval(render, 250);
-  </script>
 </body>
 </html>
+
 
