@@ -147,31 +147,7 @@
     }
 
     /* Glitter shimmer (triggered once per second via JS) */
-    @keyframes shimmerSweep {
-      0%   { transform: translateX(-120%) skewX(-18deg); opacity: 0; }
-      15%  { opacity: .95; }
-      100% { transform: translateX(120%) skewX(-18deg); opacity: 0; }
-    }
-    .timer.glitter::after{
-      content: "";
-      position: absolute;
-      inset: -4px -10px;
-      pointer-events: none;
-      opacity: 0;
-      background: linear-gradient(
-        90deg,
-        transparent 0%,
-        rgba(255,255,255,.0) 35%,
-        rgba(255,255,255,.45) 50%,
-        rgba(255,255,255,.0) 65%,
-        transparent 100%
-      );
-      mix-blend-mode: screen;
-    }
-    .timer.glitter.sparkle::after{
-      opacity: 1;
-      animation: shimmerSweep .28s linear;
-    }
+ 
 
     .subrow{
       display:flex;
@@ -308,14 +284,6 @@
 
     let lastSecond = -1;
 
-    function sparkleTick(){
-      // toggle class to re-trigger the shimmer animation
-      els.launchTimer.classList.remove("sparkle");
-      els.raidsTimer.classList.remove("sparkle");
-      void els.launchTimer.offsetWidth; // reflow
-      els.launchTimer.classList.add("sparkle");
-      els.raidsTimer.classList.add("sparkle");
-    }
 
     function render(){
       const tzMode = els.tzSelect.value;
@@ -336,14 +304,10 @@
       const tz = tzLabel(tzMode);
       els.launchTz.textContent = tz;
       els.raidsTz.textContent  = tz;
+els.launchTimer.classList.add("pulsing");
+els.raidsTimer.classList.add("pulsing");
 
-      // glitter once per second, synced to real seconds
-      const nowSec = Math.floor(now / 1000);
-      if (nowSec !== lastSecond){
-        lastSecond = nowSec;
-        sparkleTick();
-      }
-    }
+   
 
     els.tzSelect.addEventListener("change", render);
     render();
@@ -351,3 +315,4 @@
   </script>
 </body>
 </html>
+
