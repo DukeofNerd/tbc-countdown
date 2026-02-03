@@ -114,9 +114,9 @@ select{
   margin: 0;
 }
 
-/* Tiny alignment nudges */
-.panel--right{ transform: translateX(-10px); }
-.panel--left{  transform: translateX(8px);  }
+/* Pull both panels toward the center seam */
+.panel--left{  transform: translateX(36px); }  /* left box moves right (toward center) */
+.panel--right{ transform: translateX(-14px); } /* right box moves left (toward center) */
 
 .label{
   font-family: var(--mono);
@@ -299,6 +299,7 @@ select{
   </script>
 </body>
 </html>
+
 
 
 
